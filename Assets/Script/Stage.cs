@@ -25,11 +25,12 @@ public class Stage : MonoBehaviour
     public Vector2 tileSize = new Vector2(16, 16);
     private int prevTileId = -1;
     public Sprite[] islandSprites;
+    public Sprite[] fowSprites;
     public Camera cam;
     private Map map;
+    private Map tempMap;
     public PlayerMovement playerPrefab;
     private PlayerMovement player;
-    private Vector3 startPos => new Vector3(-(mapWidth * tileSize.x / 2f), (mapHeight * tileSize.y / 2f), 0);
     private Vector3 tileposition
     {
         get
@@ -37,8 +38,6 @@ public class Stage : MonoBehaviour
             Vector3 pos = transform.position;
             pos.x = -(mapWidth * tileSize.x / 2);
             pos.y = mapHeight * tileSize.y / 2;
-            pos.x += tileSize.x / 2;
-            pos.y += tileSize.y / 2;
             return pos;
         }
     }
@@ -110,16 +109,23 @@ public class Stage : MonoBehaviour
     {
         var tile = map.tiles[tileId];
         var tileGo = tileObjs[tileId];
+        if (tileGo == null) return;
         var ren = tileGo.GetComponent<SpriteRenderer>();
         if (tile.autoTileId != (int)TileTypes.Empty)
         {
-            ren.sprite = islandSprites[tile.autoTileId];
+            if(!tile.isVisited)
+            {
+                ren.sprite = fowSprites[tile.fowTileId];
+            }
+            else
+            {
+                ren.sprite = islandSprites[tile.autoTileId];
+            }
         }
         else
         {
             ren.sprite = null;
         }
-
     }
     public int ScreenPosToTileId(Vector3 screenPos)
     {
@@ -142,9 +148,16 @@ public class Stage : MonoBehaviour
 
     public Vector3 GetTilePos(int tileId)
     {
-        return GetTilePos(tileId/mapHeight,tileId/mapWidth);
+        return GetTilePos(tileId/mapHeight,tileId%mapWidth);
     }
 
     public Vector3 GetTilePos(int y, int x) => tileposition + new Vector3(x*tileSize.x,-y*tileSize.y);
 
+    public void TilesMap()
+    {
+        for (int i = 0; i < map.tiles.Length; i++)
+        {
+            DecorateTile(i);
+        }
+    }
 }
