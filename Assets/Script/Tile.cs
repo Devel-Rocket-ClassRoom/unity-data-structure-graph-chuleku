@@ -35,5 +35,31 @@ public class Tile
         }
 
     }
+    public void RemoveAdjacents(Tile tile)
+    {
+        for (int i = 0; i < adjacents.Length; i++)
+        {
+            if (adjacents[i] == null) continue;
+
+            if (adjacents[i].id == tile.id)
+            {
+                adjacents[i] = null;   
+                UpdateAutoTileId();
+                break;
+            }
+        }
+    }
+    public void ClearAdjacents()
+    {
+        for(int i = 0;i < adjacents.Length;i++)
+        {
+            if (adjacents[i] == null) continue;
+
+            adjacents[i].RemoveAdjacents(this);
+            adjacents[i] = null;
+        }
+
+        UpdateAutoTileId();
+    }
 
 }

@@ -128,9 +128,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1308936933}
+  - component: {fileID: 1308936934}
   m_Layer: 0
   m_Name: Stage
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,6 +151,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1308936934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308936932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e22dda747b21b68449d1e4e28f0507b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stage
+  tilePrefabs: {fileID: 2377547932859317172, guid: 008e512aece78f147ab21410f198a478, type: 3}
+  mapWidth: 20
+  mapHeight: 20
+  erodePercent: 0.5
+  erodeIterations: 2
+  tileSize: {x: 16, y: 16}
+  islandSprites:
+  - {fileID: 21300000, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300002, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300004, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300006, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300008, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300010, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300012, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300014, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300016, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300018, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300020, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300022, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300024, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300026, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300028, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300030, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
 --- !u!1 &1610147900
 GameObject:
   m_ObjectHideFlags: 0
