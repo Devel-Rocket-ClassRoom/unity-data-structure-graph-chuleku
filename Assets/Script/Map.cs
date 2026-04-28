@@ -14,7 +14,7 @@ public enum TileTypes
     Mountains = 18,
     Towns = 19,
     Castle = 20,
-    Monster = 22,
+    Monster = 21,
 }
 public class Map
 {
@@ -23,6 +23,9 @@ public class Map
     public Tile[] tiles;
     public Tile[] CoastTiles => tiles.Where(t=>t.autoTileId>=0&&t.autoTileId<(int)TileTypes.grass).ToArray();
     public Tile[] LandTiles => tiles.Where(t => t.autoTileId == (int)TileTypes.grass).ToArray();
+
+    public Tile startTile;
+    public Tile castleTile;
 
     public void Init(int rows, int cols)
     {
@@ -115,8 +118,9 @@ public class Map
         DecorateTiles(LandTiles, townPercent, TileTypes.Towns);
         DecorateTiles(LandTiles, monsterPercent, TileTypes.Monster);
         var towns = tiles.Where(t => t.autoTileId == (int)TileTypes.Towns).ToArray();
-        ShuffleTiles(towns);
-        towns[0].autoTileId = (int)TileTypes.Castle;
+        castleTile = towns[0];
+        startTile = towns[Random.Range(1,towns.Length)];
+
         return true;
     }
 }

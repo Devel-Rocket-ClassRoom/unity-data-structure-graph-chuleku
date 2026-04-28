@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 1308936932}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 99.54941, y: 323.9832, z: 0}
+  m_LocalPosition: {x: -23, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -168,24 +168,41 @@ MonoBehaviour:
   mapHeight: 20
   erodePercent: 0.5
   erodeIterations: 2
+  lakePercent: 0.1
+  treePercent: 0.1
+  hillPercent: 0.1
+  mountainPercent: 0.1
+  townPercent: 0.2
+  monsterPercent: 0.1
+  distance: 100
   tileSize: {x: 16, y: 16}
   islandSprites:
-  - {fileID: 21300000, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300002, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300004, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300006, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300008, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300010, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300012, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300014, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300016, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300018, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300020, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300022, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300024, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300026, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300028, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
-  - {fileID: 21300030, guid: c78739b6ec5014a70a168b0b36c12e79, type: 3}
+  - {fileID: 21300000, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300002, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300004, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300006, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300008, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300010, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300012, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300014, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300016, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300018, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300020, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300022, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300024, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300026, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300028, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300030, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300032, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300034, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300036, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300038, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300040, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300042, guid: 6dda2095192964815b349ac505a5e664, type: 3}
+  - {fileID: 21300000, guid: bf40ef62e426d47f698ffdfa0cebee71, type: 3}
+  - {fileID: 21300000, guid: 9c558513e4f05429198fc99dc4ea0b1c, type: 3}
+  cam: {fileID: 1610147902}
+  playerPrefab: {fileID: 1604290994671190051, guid: 6d36fade4ff115a41af4af5ba165920b, type: 3}
 --- !u!1 &1610147900
 GameObject:
   m_ObjectHideFlags: 0

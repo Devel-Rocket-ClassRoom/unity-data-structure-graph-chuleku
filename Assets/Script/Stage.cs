@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics.Tracing;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,27 +21,64 @@ public class Stage : MonoBehaviour
     public float townPercent = 0.2f;
     public float monsterPercent = 0.09f;
 
-
+    public float distance = 100f;
     public Vector2 tileSize = new Vector2(16, 16);
-
+    private int prevTileId = -1;
     public Sprite[] islandSprites;
-
+    public Camera cam;
     private Map map;
-
+    public PlayerMovement playerPrefab;
+    private PlayerMovement player;
+    private Vector3 startPos => new Vector3(-(mapWidth * tileSize.x / 2f), (mapHeight * tileSize.y / 2f), 0);
+    private Vector3 tileposition
+    {
+        get
+        {   
+            Vector3 pos = transform.position;
+            pos.x = -(mapWidth * tileSize.x / 2);
+            pos.y = mapHeight * tileSize.y / 2;
+            pos.x += tileSize.x / 2;
+            pos.y += tileSize.y / 2;
+            return pos;
+        }
+    }
     public Map Map => map;
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ResetStage();
+            CreatePlayer();
+        }
+        if(tileObjs !=null)
+        {
+            int currentTileId = ScreenPosToTileId(Input.mousePosition);
+            if (prevTileId != currentTileId)
+            {
+                tileObjs[currentTileId].GetComponent<SpriteRenderer>().color = Color.green;
+                if(prevTileId>=0&&prevTileId<tileObjs.Length)
+                {
+                    tileObjs[prevTileId].GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                prevTileId = currentTileId;
+            }
         }
     }
     private void ResetStage()
     {
         map = new Map();
-        map.Init(mapHeight,mapWidth);
-        map.CreateIsland(erodePercent, erodeIterations,lakePercent,treePercent,hillPercent,mountainPercent,townPercent,monsterPercent);
+        map.Init(mapHeight, mapWidth);
+        map.CreateIsland(erodePercent, erodeIterations, lakePercent, treePercent, hillPercent, mountainPercent, townPercent, monsterPercent);
         CreateGrid();
+    }
+    private void CreatePlayer()
+    {
+        if(player !=null)
+        {
+            Destroy(player.gameObject);
+        }
+        player = Instantiate(playerPrefab);
+        player.MoveTo(map.startTile.id);
     }
     private void CreateGrid()
     {
@@ -52,11 +90,10 @@ public class Stage : MonoBehaviour
             }
         }
         tileObjs = new GameObject[mapWidth * mapHeight];
-
-        var position = Vector3.zero;
+        var position = tileposition;
         for (int i = 0; i < mapHeight; i++)
         {
-            for(int j = 0; j < mapWidth; j++)
+            for (int j = 0; j < mapWidth; j++)
             {
                 var tileId = i * mapWidth + j;
                 var newGo = Instantiate(tilePrefabs, transform);
@@ -65,7 +102,7 @@ public class Stage : MonoBehaviour
                 tileObjs[tileId] = newGo;
                 DecorateTile(tileId);
             }
-            position.x = 0;
+            position.x = tileposition.x;
             position.y -= tileSize.y;
         }
     }
@@ -82,7 +119,32 @@ public class Stage : MonoBehaviour
         {
             ren.sprite = null;
         }
-             
+
     }
+    public int ScreenPosToTileId(Vector3 screenPos)
+    {
+        screenPos.z = Mathf.Abs(transform.position.z - cam.transform.position.z);
+        return WorldPosToTileId(cam.ScreenToWorldPoint(screenPos));
+    }
+
+    public int WorldPosToTileId(Vector3 worldPos)
+    {
+        var first = tileposition;
+
+        int x = Mathf.FloorToInt((worldPos.x-first.x)/tileSize.x+0.5f);
+        int y = Mathf.FloorToInt((first.y- worldPos.y) /tileSize.y+0.5f);
+        
+        x = Mathf.Clamp(x,0,mapWidth-1);
+        y = Mathf.Clamp(y,0,mapHeight-1);
+
+        return y * mapWidth + x;
+    }
+
+    public Vector3 GetTilePos(int tileId)
+    {
+        return GetTilePos(tileId/mapHeight,tileId/mapWidth);
+    }
+
+    public Vector3 GetTilePos(int y, int x) => tileposition + new Vector3(x*tileSize.x,-y*tileSize.y);
 
 }
