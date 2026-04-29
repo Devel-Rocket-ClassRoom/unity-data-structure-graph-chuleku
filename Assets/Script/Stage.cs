@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Tracing;
+using Unity.Properties;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -28,7 +30,6 @@ public class Stage : MonoBehaviour
     public Sprite[] fowSprites;
     public Camera cam;
     private Map map;
-    private Map tempMap;
     public PlayerMovement playerPrefab;
     private PlayerMovement player;
     private Vector3 tileposition
@@ -36,8 +37,10 @@ public class Stage : MonoBehaviour
         get
         {   
             Vector3 pos = transform.position;
-            pos.x = -(mapWidth * tileSize.x / 2);
-            pos.y = mapHeight * tileSize.y / 2;
+            pos.x -= (mapWidth * tileSize.x / 2);
+            pos.y += mapHeight * tileSize.y / 2;
+            pos.x += tileSize.x * 0.5f;
+            pos.y -= tileSize.y * 0.5f;
             return pos;
         }
     }
@@ -63,13 +66,41 @@ public class Stage : MonoBehaviour
             }
         }
     }
-    private void ResetStage()
+    private void DrawPath(List<Tile> path)
+    {
+
+        foreach (var tile in tileObjs)
+        {
+            tile.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        for (int i = 0; i < path.Count; i++)
+        {
+            float t = i / (path.Count - 1);
+            tileObjs[path[i].id].GetComponent<SpriteRenderer>().color = Color.Lerp(Color.green, Color.red, t);
+        }
+    }
+
+/*    private void ResetStage()
+    {
+        map = new Map();
+        map.Init(mapHeight, mapWidth);
+        bool success = false;
+        do
+        {
+            success = map.CreateIsland(erodePercent, erodeIterations, lakePercent, treePercent, hillPercent, mountainPercent, townPercent, monsterPercent);
+        }
+        while (!success);
+        CreateGrid();
+    }*/    //나중에 한거
+    private void ResetStage()  // 기존것
     {
         map = new Map();
         map.Init(mapHeight, mapWidth);
         map.CreateIsland(erodePercent, erodeIterations, lakePercent, treePercent, hillPercent, mountainPercent, townPercent, monsterPercent);
         CreateGrid();
     }
+
+
     private void CreatePlayer()
     {
         if(player !=null)
@@ -77,7 +108,7 @@ public class Stage : MonoBehaviour
             Destroy(player.gameObject);
         }
         player = Instantiate(playerPrefab);
-        player.MoveTo(map.startTile.id);
+        player.Warp(map.startTile.id);
     }
     private void CreateGrid()
     {
@@ -105,7 +136,7 @@ public class Stage : MonoBehaviour
             position.y -= tileSize.y;
         }
     }
-    public void DecorateTile(int tileId)
+ /*   public void DecorateTile(int tileId) // 기존
     {
         var tile = map.tiles[tileId];
         var tileGo = tileObjs[tileId];
@@ -125,6 +156,73 @@ public class Stage : MonoBehaviour
         else
         {
             ren.sprite = null;
+        }
+    }*/
+    public void DecorateTile(int tileId)
+    {
+        var tile = map.tiles[tileId];
+        var tileGo = tileObjs[tileId];
+        if (tileGo == null) return;
+        var ren = tileGo.GetComponent<SpriteRenderer>();
+        if (tile.isVisited)
+        {
+
+            if (tile.autoTileId != (int)TileTypes.Empty)
+            {
+
+                ren.sprite = islandSprites[tile.autoTileId];
+            }
+            else
+            {
+                ren.sprite = null;
+            }
+        }
+        else
+        {
+            ren.sprite = fowSprites[tile.fowTileId];
+            
+        }
+    }
+    public int visitRadius = 1;
+    public void OnTileVisited(int tileid)
+    {
+        OnTileVisited(map.tiles[tileid]);
+    }
+    public void OnTileVisited(Tile tile)
+    {
+        int centerX = tile.id % mapWidth;
+        int centerY = tile.id / mapWidth;
+
+        for(int i = -visitRadius;i<=visitRadius;i++)
+        {
+            for(int j = -visitRadius;j<=visitRadius;j++)
+            {
+                int x = centerX + j;
+                int y = centerY + i;
+                if(x<0||x>=mapWidth||y<0||y>=mapHeight) continue;
+
+                int id = y * mapWidth + x;
+                map.tiles[id].isVisited = true;
+                DecorateTile(id);
+            }
+        }
+        var radius = visitRadius + 1;
+        for(int i = -radius;i<=radius;i++)
+        {
+            for(int j = -radius;j<=radius;j++)
+            {
+                if(i==-radius||i==radius||j==-radius||j==radius)
+                {
+                    int x = centerX + j;
+                    int y = centerY + i;
+                    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) continue;
+
+                    int id = y * mapWidth + x;
+                    map.tiles[id].UpdateFowTileId();
+                    DecorateTile(id);
+                }
+                
+            }
         }
     }
     public int ScreenPosToTileId(Vector3 screenPos)
